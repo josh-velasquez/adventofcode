@@ -1,7 +1,4 @@
 
-def getValuesArray(start, ranges):
-    return [element for element in range(start, start + ranges)]
-
 # guaranteed to one mapping that exists
 def getSoilLocationNumber(seed, gardenDic):
     # loop over the dictionary and map out the seed
@@ -9,24 +6,24 @@ def getSoilLocationNumber(seed, gardenDic):
     intSeed = int(seed)
     mappingPath.append(intSeed)
     for key, values in gardenDic.items():
-        # process the seed first
         for value in values:
-            start1, start2, range = value
-            firstRange = getValuesArray(int(start1), int(range))
-            secondRange = getValuesArray(int(start2), int(range))
-            # check if seed exists in the first mapping
-            
-            if (intSeed in secondRange):
+            start1, start2, rangeVal = value
+            if (intSeed in range(int(start2), int(start2) + int(rangeVal))):
                 # check if seed is in the second mapping
-                mappingIndex = secondRange.index(intSeed)
+                mappingIndex = intSeed - int(start2)
                 if (mappingIndex != 0):
-                    mappingPath.append(firstRange[mappingIndex])
-                    intSeed = firstRange[mappingIndex]
+                    mappedVal = int(start1) + mappingIndex
+                    mappingPath.append(mappedVal)
+                    intSeed = mappedVal
+                    break
                 else:
                     mappingPath.append(int(start1))
                     intSeed = int(start1)
                     break
             else:
+                if (values.index(value) == len(values) - 1):
+                    mappingPath.append(int(mappingPath[-1]))
+                    intSeed = int(mappingPath[-1])
                 continue
     return mappingPath[-1]
 
@@ -50,11 +47,19 @@ def main():
 
         line = file.readline()
 
+    # convert the seed into ranges instead
     locationNumbers = []
-    for seed in seeds:
-        locationNumbers.append(getSoilLocationNumber(seed, gardenDic))
+    counter = 0
+    while(counter < len(seeds) - 1):
+        start = int(seeds[counter])
+        end = int(seeds[counter + 1])
+        for seed in range(start, start  + end):
+            locationNumbers.append(getSoilLocationNumber(seed, gardenDic))
+        counter += 2
     
-    print(locationNumbers)
+    
+    # print(locationNumbers)
+    print(min(locationNumbers))
     
     file.close()
 
