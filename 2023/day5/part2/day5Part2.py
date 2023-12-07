@@ -1,7 +1,7 @@
 
 # guaranteed to one mapping that exists
 def getSoilLocationNumber(seed, gardenDic):
-    # loop over the dictionary and map out the seed
+    # loop over the dictionary and map out the seed to location
     mappingPath = []
     intSeed = int(seed)
     mappingPath.append(intSeed)
@@ -9,7 +9,7 @@ def getSoilLocationNumber(seed, gardenDic):
         for value in values:
             start1, start2, rangeVal = value
             if (intSeed in range(int(start2), int(start2) + int(rangeVal))):
-                # check if seed is in the second mapping
+                # check if source exists in the destination mapping
                 mappingIndex = intSeed - int(start2)
                 if (mappingIndex != 0):
                     mappedVal = int(start1) + mappingIndex
@@ -28,7 +28,7 @@ def getSoilLocationNumber(seed, gardenDic):
     return mappingPath[-1]
 
 def main():
-    file = open('input.txt', 'r')
+    file = open('sample.txt', 'r')
     line = file.readline()
 
     gardenDic = {}
